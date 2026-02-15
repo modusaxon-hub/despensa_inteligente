@@ -1,0 +1,204 @@
+:root {
+    --primary: #2e7d32;
+    --primary-light: #60ad5e;
+    --dark: #1b5e20;
+    --accent: #ffab00;
+    --bg: #f8faf9;
+    --text: #2d3436;
+    --glass: rgba(255, 255, 255, 0.9);
+}
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    /* Base ligeramente menor */
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.layout-wrapper {
+    display: flex;
+    max-width: 1400px;
+    margin: -40px auto 0;
+    gap: 2rem;
+    padding: 0 1rem 3rem;
+    position: relative;
+    z-index: 10;
+}
+
+.shopping-list {
+    flex: 2;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.section-header h2 {
+    margin: 0;
+    color: var(--dark);
+}
+
+.section-header p {
+    color: #636e72;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 2rem;
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.product-row {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #edf2f7;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.product-row:hover {
+    border-color: var(--primary-light);
+    transform: translateX(5px);
+    box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.03);
+}
+
+.product-row.selected {
+    background: #f0fdf4;
+    border-color: var(--primary);
+}
+
+.check-container {
+    padding-right: 1.5rem;
+}
+
+.check-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.prod-main-info {
+    flex: 1;
+}
+
+.prod-main-info h4 {
+    margin: 0;
+    font-size: 12px;
+    /* El tamaño solicitado */
+    font-weight: 600;
+}
+
+.prod-category {
+    font-size: 10px;
+    color: #b2bec3;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.best-option {
+    text-align: right;
+    padding: 0 1rem;
+}
+
+.best-price {
+    display: block;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--primary);
+}
+
+.best-store {
+    font-size: 9px;
+    background: #f1f2f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #57606f;
+}
+
+.budget-panel {
+    flex: 1;
+    min-width: 320px;
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.budget-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid #edf2f7;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.budget-main {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+#total-budget {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--dark);
+}
+
+.badge {
+    background: #e1f5fe;
+    color: #01579b;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.btn-primary-action {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #b2bec3;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .layout-wrapper {
+        flex-direction: column;
+    }
+
+    .shopping-list {
+        max-height: none;
+    }
+}

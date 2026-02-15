@@ -2,4 +2,4 @@
 
 https://github.com/modusaxon-hub/despensa_inteligente.git
 
-token: 
+token: [PROTEGIDO] (Ya configurado en Git)
