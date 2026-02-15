@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario — Despensa Inteligente</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&display=swap');
+
+        :root {
+            --green: #2d8a4e;
+            --dark: #1a1a2e;
+            --accent: #e67e22;
+            --light-green: #eafaf1;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 2.5cm 2cm;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            line-height: 1.7;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .paper-a4 {
+            background: white;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 30px 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+        }
+
+        h1 {
+            border-bottom: 3px solid var(--green);
+            padding-bottom: 15px;
+            font-size: 2em;
+        }
+
+        h2 {
+            border-left: 4px solid var(--green);
+            padding-left: 12px;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: var(--accent);
+        }
+
+        .intro {
+            background: var(--light-green);
+            border-left: 5px solid var(--green);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .step {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--green);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .tip {
+            background: #e8f5e9;
+            border-left: 4px solid var(--green);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid var(--accent);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .column-guide {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .column-guide dt {
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--green);
+            color: white;
+        }
+
+        .emoji-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .emoji-list li {
+            padding: 5px 0;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.75em;
+            text-align: center;
+            color: #aaa;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="paper-a4">
+        <header>
+            <div
+                style="color: var(--green); font-weight: bold; font-size: 0.8em; letter-spacing: 0.2em; text-transform: uppercase;">
+                Despensa Inteligente — Manual de Usuario</div>
+            <h1>📗 Manual de Usuario</h1>
+        </header>
+
+        <div class="intro">
+            <strong>¿Qué es Despensa Inteligente?</strong><br>
+            Una herramienta para planificar tu mercado comparando precios entre <strong>D1, Olímpica, ARA y
+                Megatiendas</strong> en Santa Marta. Ve de un vistazo cuál tienda tiene el mejor precio para cada
+            producto y calcula tu presupuesto total incluyendo plaza y carnicería.
+        </div>
+
+        <!-- ═══════ ACCESO ═══════ -->
+        <h2>1. Cómo Acceder</h2>
+        <div class="step">
+            <p><span class="step-number">1</span> Asegúrate de que <strong>XAMPP</strong> esté encendido (Apache +
+                MySQL).</p>
+            <p><span class="step-number">2</span> Abre tu navegador y ve a:
+                <strong><code>http://localhost/despensa_inteligente/</code></strong></p>
+            <p><span class="step-number">3</span> Verás el <strong>Planificador Maestro</strong> con la tabla de
+                productos y precios.</p>
+        </div>
+
+        <!-- ═══════ INTERFAZ ═══════ -->
+        <h2>2. Entendiendo la Interfaz</h2>
+
+        <h3>2.1. Dashboard Superior</h3>
+        <table>
+            <tr>
+                <th>Elemento</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>💰 <strong>Ahorro Histórico</strong></td>
+                <td>Muestra cuánto has ahorrado al elegir siempre la tienda más barata.</td>
+            </tr>
+            <tr>
+                <td>🛍️ <strong>Presupuesto Plaza</strong></td>
+                <td>Campo manual para ingresar lo que gastarás en la plaza de mercado (verduras, frutas).</td>
+            </tr>
+            <tr>
+                <td>🥩 <strong>Presupuesto Carnicería</strong></td>
+                <td>Campo manual para ingresar lo que gastarás en carne.</td>
+            </tr>
+        </table>
+
+        <h3>2.2. Tabla de Productos</h3>
+        <table>
+            <tr>
+                <th>Columna</th>
+                <th>Qué contiene</th>
+            </tr>
+            <tr>
+                <td><strong>Cant.</strong></td>
+                <td>Cantidad que quieres comprar de ese producto. Escribe un número (ej: 2).</td>
+            </tr>
+            <tr>
+                <td><strong>Producto</strong></td>
+                <td>Nombre del artículo + su categoría (en verde). Los productos de plaza y carnes aparecen primero.
+                </td>
+            </tr>
+            <tr>
+                <td><strong>D1</strong></td>
+                <td>Precio en tiendas D1. Si no hay precio, aparece "N/D".</td>
+            </tr>
+            <tr>
+                <td><strong>Olímpica</strong></td>
+                <td>Precio en Olímpica.</td>
+            </tr>
+            <tr>
+                <td><strong>Ara</strong></td>
+                <td>Precio en ARA.</td>
+            </tr>
+            <tr>
+                <td><strong>Mega</strong></td>
+                <td>Precio en Megatiendas.</td>
+            </tr>
+            <tr>
+                <td><strong>Destino</strong></td>
+                <td>Dónde comprarás este producto: 📍 Tiendas, 🥬 Plaza, o 🥩 Carnicería.</td>
+            </tr>
+        </table>
+
+        <!-- ═══════ PASO A PASO ═══════ -->
+        <h2>3. Cómo Planificar tu Mercado</h2>
+
+        <div class="step">
+            <h3><span class="step-number">1</span> Revisa los precios</h3>
+            <p>Compara las 4 columnas de precios para cada producto. El objetivo es identificar la tienda más barata
+                para cada artículo.</p>
+            <div class="tip">
+                <strong>💡 Tip:</strong> Si un producto muestra "N/D" en una tienda, significa que no se ha encontrado
+                precio todavía. Los precios se actualizan automáticamente con el bot de scraping.
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span> Selecciona cantidades</h3>
+            <p>En la columna <strong>"Cant."</strong>, escribe el número de unidades que necesitas comprar:</p>
+            <ul class="emoji-list">
+                <li>✅ Escribe <strong>0</strong> para productos que no necesitas esta vez.</li>
+                <li>✅ Escribe <strong>1, 2, 3...</strong> según la cantidad deseada.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span> Elige el destino de compra</h3>
+            <p>Para cada producto, selecciona en la columna <strong>"Destino"</strong>:</p>
+            <table>
+                <tr>
+                    <th>Opción</th>
+                    <th>Cuándo usarla</th>
+                </tr>
+                <tr>
+                    <td>📍 <strong>Tiendas</strong></td>
+                    <td>El producto se comprará en una cadena (D1, Olímpica, ARA o Mega). El sistema calcula el precio
+                        más bajo automáticamente.</td>
+                </tr>
+                <tr>
+                    <td>🥬 <strong>Plaza</strong></td>
+                    <td>Frutas, verduras y otros artículos que compras en la plaza de mercado. El costo se suma al
+                        "Presupuesto Plaza" que defines arriba.</td>
+                </tr>
+                <tr>
+                    <td>🥩 <strong>Carnicería</strong></td>
+                    <td>Carnes y embutidos que compras en tu carnicería de confianza. El costo se suma al "Presupuesto
+                        Carnicería".</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">4</span> Configura presupuestos especiales</h3>
+            <p>En el dashboard superior, escribe cuánto planeas gastar en:</p>
+            <ul class="emoji-list">
+                <li>🛍️ <strong>Presupuesto Plaza:</strong> Ej: $50.000 para verduras y frutas.</li>
+                <li>🥩 <strong>Presupuesto Carnicería:</strong> Ej: $80.000 para carnes.</li>
+            </ul>
+            <p>Estos valores se suman automáticamente al <strong>Gran Total</strong>.</p>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">5</span> Revisa el resumen</h3>
+            <p>En el panel lateral derecho verás:</p>
+            <ul class="emoji-list">
+                <li>💵 <strong>Total Tiendas:</strong> Suma de productos marcados como "📍 Tiendas" × cantidad × precio
+                    más bajo.</li>
+                <li>🛍️ <strong>Presupuesto Especial:</strong> Plaza + Carnicería.</li>
+                <li>🏷️ <strong>GRAN TOTAL:</strong> Todo sumado. Este es tu presupuesto final del mercado.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">6</span> Confirma tu mercado</h3>
+            <p>Haz clic en el botón <strong>"Confirmar Mercado"</strong> para guardar tu lista de compras optimizada.
+            </p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- ═══════ PREGUNTAS FRECUENTES ═══════ -->
+        <h2>4. Preguntas Frecuentes</h2>
+
+        <div class="step">
+            <h3>¿Cada cuánto se actualizan los precios?</h3>
+            <p>Los precios se actualizan cada vez que se ejecuta el bot de scraping (<code>auto_bot.py</code>). Puedes
+                pedir que se ejecute manualmente o programarlo para que corra automáticamente.</p>
+        </div>
+
+        <div class="step">
+            <h3>¿Qué significa "N/D" en un precio?</h3>
+            <p>"N/D" = <strong>No Disponible</strong>. Significa que no se ha podido obtener el precio de esa tienda
+                para ese producto. Puede ser porque:</p>
+            <ul>
+                <li>La tienda no vende ese producto.</li>
+                <li>La URL del producto cambió y necesita actualizarse.</li>
+                <li>El bot no pudo acceder a la tienda (mantenimiento, etc.).</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>¿Puedo agregar un producto que no aparece?</h3>
+            <p>Sí. Los productos se importan vía CSV o se agregan directamente en la base de datos. Contacta al
+                administrador del sistema para agregar nuevos productos con sus URLs de tienda.</p>
+        </div>
+
+        <div class="step">
+            <h3>¿El sistema elige automáticamente la tienda más barata?</h3>
+            <p>Sí. Cuando seleccionas "📍 Tiendas" como destino y defines una cantidad, el sistema automáticamente usa
+                el <strong>precio más bajo</strong> de las 4 tiendas para calcular el total.</p>
+        </div>
+
+        <div class="step">
+            <h3>¿Los precios son exactos?</h3>
+            <p>Los precios se obtienen directamente de las páginas web de cada tienda. Sin embargo, pueden variar según:
+            </p>
+            <ul>
+                <li>Promociones temporales o cupones.</li>
+                <li>Disponibilidad del producto en tu ciudad.</li>
+                <li>Hora del día en que se ejecutó el bot.</li>
+            </ul>
+            <div class="warning">
+                <strong>⚠️ Importante:</strong> Siempre verifica el precio final al momento de la compra. Esta
+                herramienta es una <strong>guía de referencia</strong>, no un sistema de compra directa.
+            </div>
+        </div>
+
+        <!-- ═══════ GLOSARIO ═══════ -->
+        <h2>5. Glosario</h2>
+        <table>
+            <tr>
+                <th>Término</th>
+                <th>Significado</th>
+            </tr>
+            <tr>
+                <td><strong>Scraper / Bot</strong></td>
+                <td>Programa automático que visita las tiendas online y lee los precios.</td>
+            </tr>
+            <tr>
+                <td><strong>PUM</strong></td>
+                <td>Precio por Unidad de Medida. Compara el costo real por gramo, ml, etc.</td>
+            </tr>
+            <tr>
+                <td><strong>N/D</strong></td>
+                <td>No Disponible. Sin precio registrado para esa tienda.</td>
+            </tr>
+            <tr>
+                <td><strong>Gran Total</strong></td>
+                <td>Suma de Tiendas + Plaza + Carnicería. Tu presupuesto final.</td>
+            </tr>
+            <tr>
+                <td><strong>Destino</strong></td>
+                <td>Dónde comprarás cada producto: Tienda, Plaza o Carnicería.</td>
+            </tr>
+        </table>
+
+        <footer class="footer">
+            Documento generado por Agente Documentador Técnico Pro | 15 de Febrero 2026 | Despensa Inteligente — Santa
+            Marta
+        </footer>
+    </div>
+</body>
+
+</html>

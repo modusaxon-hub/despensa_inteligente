@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERROR LOG — Despensa Inteligente</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap');
+
+        :root {
+            --green: #2d8a4e;
+            --dark: #1a1a2e;
+            --red: #e74c3c;
+            --orange: #f39c12;
+            --blue: #2980b9;
+            --success: #27ae60;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 2.5cm 2cm;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            line-height: 1.6;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .paper-a4 {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 30px 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+        }
+
+        h1 {
+            border-bottom: 3px solid var(--red);
+            padding-bottom: 15px;
+            font-size: 2em;
+        }
+
+        h2 {
+            border-left: 4px solid var(--green);
+            padding-left: 12px;
+            margin-top: 30px;
+        }
+
+        .hook {
+            background: #fff3cd;
+            border-left: 5px solid var(--orange);
+            padding: 15px;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .error-entry {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+
+        .error-header {
+            background: #fdedec;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .error-header h3 {
+            margin: 0;
+            color: var(--red);
+            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+        }
+
+        .error-body {
+            padding: 15px;
+        }
+
+        .error-cause {
+            background: #fef9e7;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .solution {
+            border-left: 4px solid #ccc;
+            padding: 10px 15px;
+            margin: 10px 0;
+        }
+
+        .solution.winner {
+            border-left-color: var(--success);
+            background: #eafaf1;
+        }
+
+        .solution.failed {
+            border-left-color: var(--red);
+            background: #fdedec;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            color: white;
+        }
+
+        .tag-error {
+            background: var(--red);
+        }
+
+        .tag-ok {
+            background: var(--success);
+        }
+
+        .tag-fail {
+            background: #95a5a6;
+        }
+
+        .tag-date {
+            background: var(--blue);
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f8f8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8em;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.75em;
+            text-align: center;
+            color: #aaa;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="paper-a4">
+        <header>
+            <div
+                style="color: var(--red); font-weight: bold; font-size: 0.8em; letter-spacing: 0.2em; text-transform: uppercase;">
+                Despensa Inteligente — Error Log</div>
+            <h1>🐛 ERROR_LOG: Bitácora de Errores y Soluciones</h1>
+        </header>
+
+        <div class="hook">
+            <strong>Propósito:</strong> Registrar CADA error enfrentado durante el desarrollo, las soluciones intentadas
+            (fallidas y exitosas), y la solución final definitiva. |
+            <strong>Riesgo:</strong> Sin este registro, los mismos errores se repiten en cada sesión sin referencia
+            cruzada.
+        </div>
+
+        <h2>Índice de Errores</h2>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Módulo</th>
+                <th>Error</th>
+                <th>Estado</th>
+            </tr>
+            <tr>
+                <td>ERR-001</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>Timeout networkidle en Olímpica</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-002</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>Selector de ubicación no encontrado</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-003</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>Modal con 3 estados diferentes</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-004</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>0 dropdowns tras abrir trigger</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-005</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>Selector de precio Olímpica roto</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-006</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>URL de producto Olímpica 404</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-007</td>
+                <td>15/02/2026</td>
+                <td>BD</td>
+                <td>Precio D1 aceite coco incorrecto</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-008</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>Bloque except duplicado</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-009</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>Variantes de búsqueda D1: 3000 vs 3.000</td>
+                <td><span class="tag tag-ok">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>ERR-010</td>
+                <td>15/02/2026</td>
+                <td>Scraper</td>
+                <td>0 resultados en búsqueda VTEX (selectores)</td>
+                <td><span class="tag tag-error">EN PROGRESO</span></td>
+            </tr>
+        </table>
+
+        <!-- ═══════════ ERR-001 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-001: Timeout networkidle en Olímpica</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <p><strong>Archivo:</strong> <code>scrapers/auto_bot.py</code> | <strong>Función:</strong>
+                    <code>set_olimpica_location()</code></p>
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> <code>wait_until="networkidle"</code> espera a que TODAS las
+                    peticiones de red terminen. Olímpica carga ~50+ scripts de analytics (GTM, Meta Pixel) que nunca
+                    finalizan → timeout 60s.
+                </div>
+                <pre>Page.goto: Timeout 60000ms exceeded waiting for networkidle</pre>
+
+                <div class="solution failed">
+                    <strong><span class="tag tag-fail">INTENTO 1 — FALLIDO</span></strong> Aumentar timeout a
+                    120000ms<br>
+                    <em>Resultado:</em> Solo retrasa el error. No resuelve la causa.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Cambiar a
+                    <code>wait_until="domcontentloaded"</code><br>
+                    <pre>await page.goto(url, wait_until="domcontentloaded", timeout=60000)</pre>
+                    <em>Resultado:</em> Carga en ~3s. <code>domcontentloaded</code> se dispara cuando el HTML se parsea,
+                    sin esperar recursos externos.
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-002 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-002: Selector de ubicación no encontrado</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <p><strong>Archivo:</strong> <code>scrapers/auto_bot.py</code></p>
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Las clases CSS de VTEX cambian entre versiones del sitio. El
+                    selector <code>.olimpica-dinamic-flags-0-x-shippingMethod</code> solo funciona en una versión.
+                </div>
+                <pre>Page.wait_for_selector: Timeout 10000ms exceeded</pre>
+
+                <div class="solution failed">
+                    <strong><span class="tag tag-fail">INTENTO 1 — FALLIDO</span></strong> Usar solo
+                    <code>.olimpica-dinamic-flags-0-x-shippingMethod</code><br>
+                    <em>Resultado:</em> Frágil; falla si VTEX cambia la versión del componente.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Selector combinado con
+                    <code>.first</code>
+                    <pre>page.locator(
+  ".vtex-modal-layout-0-x-triggerContainer--location-delivery-info, "
+  ".olimpica-dinamic-flags-0-x-shippingMethod"
+).first</pre>
+                    <em>Resultado:</em> Funciona con ambas versiones del selector.
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-003 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-003: Modal de ubicación con 3 estados diferentes</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <p><strong>Archivo:</strong> <code>scrapers/auto_bot.py</code> | <strong>Función:</strong>
+                    <code>set_olimpica_location()</code></p>
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Dependiendo de cookies/sesión, Olímpica muestra 3 modales
+                    diferentes:
+                    <ul>
+                        <li><strong>Estado A:</strong> "Envío a domicilio" → Botón "Continuar" (dirección ya guardada)
+                        </li>
+                        <li><strong>Estado B:</strong> "Agrega una dirección" → Input + Botón "Confirmar"</li>
+                        <li><strong>Estado C:</strong> "No tenemos cobertura" → "IR A TIENDA OLIMPICA"</li>
+                    </ul>
+                </div>
+
+                <div class="solution failed">
+                    <strong><span class="tag tag-fail">INTENTO 1 — PARCIAL</span></strong> Solo manejar Estado A (botón
+                    Continuar)<br>
+                    <em>Resultado:</em> Falla cuando aparece Estado B o C.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Detección en cascada de los 3
+                    estados:
+                    <pre>1. ¿Botón "Continuar"? → click → return
+2. ¿Botón "Confirmar"? → fill("centro") → click → return
+3. ¿Trigger visible? → click → re-check ambos botones → dropdowns</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-004 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-004: 0 dropdowns encontrados tras abrir trigger</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Al hacer clic en el trigger, el modal que aparecía era el de
+                    "Continuar" (Estado A), NO el de dropdowns. El código buscaba dropdowns sin verificar primero qué
+                    modal apareció.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Re-verificar botones antes de
+                    buscar dropdowns.
+                    <pre>await trigger.click()
+# Re-check: ¿apareció Continuar o Confirmar?
+if await continue_btn.is_visible(): ...
+if await confirm_btn.is_visible(): ...
+# SOLO entonces buscar dropdowns</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-005 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-005: Selector de precio Olímpica roto</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Olímpica migró de
+                    <code>.vtex-product-price-1-x-sellingPriceValue</code> a clases custom
+                    <code>.olimpica-dinamic-flags-0-x-currencyContainer</code>.
+                </div>
+                <pre>Viejo (roto): .vtex-product-price-1-x-sellingPriceValue
+Nuevo (OK):   .olimpica-dinamic-flags-0-x-currencyContainer</pre>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Actualizar selector en BD y en
+                    el scraper.<br>
+                    Verificado con JavaScript: <code>currencyExists: true, text: "$ 26.990"</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-006 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-006: URL de producto Olímpica retorna 404</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Olímpica cambia slugs de producto frecuentemente (añade sufijos de
+                    SKU/EAN).
+                </div>
+                <pre>404: /aceite-diana-mezcla-vegetales-vitamina-a-d-3000-ml/p
+ OK: /aceite-medalla-oro-mezc-veget-3000-ml/p ($19.990)</pre>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Búsqueda por término genérico
+                    ("aceite 3000") para encontrar la URL actual del más barato, en vez de usar URLs fijas. Esto motivó
+                    la evolución al scraper de búsqueda inteligente.
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-007 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-007: Precio D1 Aceite de Coco incorrecto ($39.900 vs $10.450)</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> El precio almacenado ($39.900) no coincidía con el precio real de D1
+                    ($10.450 Natri 210ml). Posible error del CSV de importación original o scraper que leyó un selector
+                    incorrecto.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Corrección manual en BD:
+                    <pre>UPDATE precios_tiendas SET precio = 10450
+WHERE producto_id = 194 AND tienda = 'D1'
+ORDER BY fecha_registro DESC LIMIT 1;</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-008 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-008: Bloque except duplicado en Python</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Error de edición — quedó un bloque <code>except Exception</code>
+                    residual de una refactorización anterior, causando <code>SyntaxError</code>.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Eliminar el bloque except
+                    duplicado (líneas 107-108).
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-009 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-009: Variantes de búsqueda — "3000" vs "3.000" dan resultados diferentes</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> En D1, buscar "aceite 3000" muestra 0 resultados, pero "aceite
+                    3.000" muestra 2 (Imatá $22.850 y Don Olio $26.850). Los motores de búsqueda distintos tratan los
+                    puntos de miles de forma diferente.
+                </div>
+                <div class="solution winner">
+                    <strong><span class="tag tag-ok">SOLUCIÓN DEFINITIVA</span></strong> Función
+                    <code>generar_variantes(termino)</code> que crea automáticamente todas las combinaciones:
+                    <pre>"aceite 3000" → [
+  "aceite 3000",
+  "aceite 3.000",
+  "aceite 3000ml",
+  "aceite 3.000 ml",
+  "aceite 3000 ml"
+]</pre>
+                    El scraper busca con TODAS las variantes y combina+deduplica resultados para encontrar el verdadero
+                    más barato.
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════ ERR-010 ═══════════ -->
+        <div class="error-entry">
+            <div class="error-header">
+                <h3>ERR-010: 0 resultados en búsqueda VTEX — selectores de cards</h3>
+                <span class="tag tag-date">15/02/2026</span>
+            </div>
+            <div class="error-body">
+                <div class="error-cause">
+                    <strong>📍 Causa Raíz:</strong> Los selectores de resultados de búsqueda
+                    (<code>.vtex-product-summary-2-x-container</code>) no capturan los cards de producto en D1 ni en
+                    Olímpica. D1 usa React con styled-components (clases dinámicas como
+                    <code>styles__StyledCard-sc-3jvmda-0</code>).
+                </div>
+                <pre>🔎 'aceite 3000' → 0 resultado(s)
+🔎 'aceite 3.000' → 0 resultado(s)</pre>
+                <div class="solution failed">
+                    <strong><span class="tag tag-fail">EN INVESTIGACIÓN</span></strong> Necesario inspeccionar el DOM
+                    real de búsqueda de cada tienda para identificar los selectores correctos de cards, nombres y
+                    precios. El fallback a URLs directas funciona correctamente mientras se resuelve.
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            Documento generado por Agente Documentador Técnico Pro | 15 de Febrero 2026 | Despensa Inteligente — Santa
+            Marta
+        </footer>
+    </div>
+</body>
+
+</html>

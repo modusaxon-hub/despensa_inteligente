@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica — Despensa Inteligente</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap');
+
+        :root {
+            --green: #2d8a4e;
+            --dark: #1a1a2e;
+            --accent: #e67e22;
+            --blue: #2980b9;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 2.5cm 2cm;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            line-height: 1.6;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .paper-a4 {
+            background: white;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 30px 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+        }
+
+        h1 {
+            border-bottom: 3px solid var(--green);
+            padding-bottom: 15px;
+            font-size: 2em;
+        }
+
+        h2 {
+            border-left: 4px solid var(--green);
+            padding-left: 12px;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: var(--accent);
+        }
+
+        .hook {
+            background: #eafaf1;
+            border-left: 5px solid var(--green);
+            padding: 15px;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .diagram-box {
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8em;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.4;
+            page-break-inside: avoid;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.85em;
+            page-break-inside: avoid;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #2d8a4e;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8em;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: var(--green);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.75em;
+            text-align: center;
+            color: #aaa;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="paper-a4">
+        <header>
+            <div
+                style="color: var(--green); font-weight: bold; font-size: 0.8em; letter-spacing: 0.2em; text-transform: uppercase;">
+                Despensa Inteligente — Documentación Técnica</div>
+            <h1>📘 Manual Técnico del Sistema</h1>
+        </header>
+
+        <div class="hook">
+            <strong>Propósito:</strong> Documentar la arquitectura completa del sistema, flujos de datos, decisiones
+            técnicas y estructura de código. |
+            <strong>Riesgo de no tenerlo:</strong> Sin este documento, cualquier cambio futuro se hace a ciegas, sin
+            contexto de por qué cada pieza existe.
+        </div>
+
+        <!-- ═══════ 1. STACK TECNOLÓGICO ═══════ -->
+        <h2>1. Stack Tecnológico</h2>
+        <table>
+            <tr>
+                <th>Capa</th>
+                <th>Tecnología</th>
+                <th>Propósito</th>
+            </tr>
+            <tr>
+                <td>Frontend</td>
+                <td><span class="tech-badge">HTML5</span> <span class="tech-badge">CSS3</span> <span
+                        class="tech-badge">JavaScript</span></td>
+                <td>Interfaz web responsive tipo Excel</td>
+            </tr>
+            <tr>
+                <td>Backend API</td>
+                <td><span class="tech-badge">PHP 8.x</span> <span class="tech-badge">PDO</span></td>
+                <td>Endpoints REST para consulta de productos y precios</td>
+            </tr>
+            <tr>
+                <td>Base de Datos</td>
+                <td><span class="tech-badge">MySQL / MariaDB</span></td>
+                <td>Almacenamiento de productos, precios e historial</td>
+            </tr>
+            <tr>
+                <td>Scraper</td>
+                <td><span class="tech-badge">Python 3.x</span> <span class="tech-badge">Playwright</span></td>
+                <td>Raspado automático de precios de tiendas online</td>
+            </tr>
+            <tr>
+                <td>Servidor Local</td>
+                <td><span class="tech-badge">XAMPP</span></td>
+                <td>Apache + MySQL para desarrollo local</td>
+            </tr>
+        </table>
+
+        <!-- ═══════ 2. ESTRUCTURA DE ARCHIVOS ═══════ -->
+        <h2>2. Estructura del Proyecto</h2>
+        <div class="diagram-box">
+            despensa_inteligente/
+            ├── index.html ← Entrada principal (Planificador Maestro)
+            ├── TASK.md ← Bitácora de tareas (formato tabla)
+            ├── CHANGELOG.md ← Registro de cambios por día
+            │
+            ├── app/
+            │ └── main.js ← Lógica del frontend (fetch, render, cálculos)
+            │
+            ├── api/
+            │ ├── get_products.php ← GET: Lista productos con precios más recientes
+            │ └── import_csv.php ← POST: Importar productos desde CSV
+            │
+            ├── assets/
+            │ └── style.css ← Estilos globales del planificador
+            │
+            ├── config/
+            │ └── db.php ← Conexión PDO a MySQL
+            │
+            ├── database/
+            │ └── schema.sql ← Esquema DDL (CREATE TABLE)
+            │
+            ├── scrapers/
+            │ └── auto_bot.py ← Bot de scraping con Playwright
+            │
+            ├── technical/
+            │ ├── Repositorio.md ← Config Git + URL remota
+            │ ├── ERROR_LOG.html ← Registro de errores y soluciones
+            │ ├── BITACORA_2026-02-15.html ← Cronología diaria
+            │ ├── DOC_TECNICO.html ← (Este documento)
+            │ └── MANUAL_USUARIO.html ← Guía para el usuario final
+            │
+            └── documentation/
+            └── Mercado 2026 - DIC_25.csv ← Datos de importación original
+        </div>
+
+        <!-- ═══════ 3. DIAGRAMA ENTIDAD-RELACIÓN ═══════ -->
+        <h2>3. Modelo de Datos (ERD)</h2>
+
+        <div class="diagram-box">
+            ┌────────────────────────────────────────────┐
+            │ PRODUCTOS │
+            ├────────────────────────────────────────────┤
+            │ PK id INT AUTO_INC │
+            │ nombre_personalizado VARCHAR(255) NN │
+            │ categoria VARCHAR(100) │
+            │ es_favorito BOOLEAN │
+            │ cantidad_actual DECIMAL(10,2) │
+            │ cantidad_minima DECIMAL(10,2) │
+            │ unidad_medida_base VARCHAR(20) │
+            │ termino_busqueda VARCHAR(100) │ ← NUEVO
+            │ url_olimpica TEXT │
+            │ url_d1 TEXT │
+            │ url_ara TEXT │
+            │ url_megatiendas TEXT │
+            │ selector_olimpica VARCHAR(255) │
+            │ selector_d1 VARCHAR(255) │
+            │ selector_ara VARCHAR(255) │
+            │ selector_megatiendas VARCHAR(255) │
+            │ ultima_actualizacion TIMESTAMP │
+            └───────────────┬────────────────────────────┘
+            │ 1
+            │
+            │ N
+            ┌───────────────▼────────────────────────────┐
+            │ PRECIOS_TIENDAS │
+            ├────────────────────────────────────────────┤
+            │ PK id INT AUTO_INC │
+            │ FK producto_id INT → productos │
+            │ tienda ENUM(D1,OLIMPICA,│
+            │ ARA,EXITO, │
+            │ MEGATIENDAS,OTRO)│
+            │ precio DECIMAL(10,2) │
+            │ cantidad_presentacion DECIMAL(10,2) │
+            │ unidad_presentacion VARCHAR(10) │
+            │ precio_por_unidad DECIMAL(10,4) │ ← PUM
+            │ fecha_registro TIMESTAMP │
+            └───────────────┬────────────────────────────┘
+            │
+            │ (referencia lógica)
+            │
+            ┌───────────────▼────────────────────────────┐
+            │ HISTORIAL_COMPRAS │
+            ├────────────────────────────────────────────┤
+            │ PK id INT AUTO_INC │
+            │ FK producto_id INT → productos │
+            │ fecha_compra TIMESTAMP │
+            │ tienda_elegida VARCHAR(50) │
+            │ precio_pagado DECIMAL(10,2) │
+            │ cantidad_comprada DECIMAL(10,2) │
+            │ ahorro_estimado DECIMAL(10,2) │ ← vs más caro
+            └────────────────────────────────────────────┘
+        </div>
+
+        <h3>Relaciones</h3>
+        <table>
+            <tr>
+                <th>Relación</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>productos → precios_tiendas</td>
+                <td>1:N</td>
+                <td>Un producto tiene N registros de precio (uno por tienda por fecha). La API selecciona el más
+                    reciente.</td>
+            </tr>
+            <tr>
+                <td>productos → historial_compras</td>
+                <td>1:N</td>
+                <td>Cada compra registrada se vincula al producto. Sirve para calcular ahorro histórico.</td>
+            </tr>
+        </table>
+
+        <div class="page-break"></div>
+
+        <!-- ═══════ 4. FLUJO DE DATOS ═══════ -->
+        <h2>4. Flujo de Datos del Sistema</h2>
+
+        <div class="diagram-box">
+            ┌──────────────┐
+            │ USUARIO │
+            │ (Browser) │
+            └──────┬───────┘
+            │ HTTP GET
+            ▼
+            ┌──────────────┐ SQL Query ┌──────────┐
+            │ index.html │ ──── fetch() ────▶ │ API │
+            │ + main.js │ │ PHP/PDO │
+            └──────────────┘ └────┬─────┘
+            ▲ │
+            │ JSON │ SELECT
+            │ ▼
+            ┌──────────────┐ ┌──────────┐
+            │ Renderizado │ │ MySQL │
+            │ Tabla + $ │ │ BD │
+            └──────────────┘ └────┬─────┘
+            ▲
+            │ INSERT
+            ┌──────────────┐ ┌────┴─────┐
+            │ Tiendas │ ◀── Playwright ──▶ │ Scraper │
+            │ D1, Olímpica│ │ auto_bot │
+            │ Mega, ARA │ │ .py │
+            └──────────────┘ └──────────┘
+        </div>
+
+        <!-- ═══════ 5. FLUJO DEL SCRAPER ═══════ -->
+        <h2>5. Arquitectura del Scraper</h2>
+
+        <h3>5.1. Flujo de ejecución</h3>
+        <div class="diagram-box">
+            auto_bot.py
+            │
+            ├─ 1. CONFIGURAR UBICACIÓN
+            │ ├── set_megatiendas_location()
+            │ │ └── localStorage.setItem('shippingData', {...})
+            │ │
+            │ └── set_olimpica_location()
+            │ ├── ¿"Continuar"? → click → ✅
+            │ ├── ¿"Confirmar"? → fill("centro") → click → ✅
+            │ └── ¿Trigger? → click → re-check → dropdowns
+            │
+            ├─ 2. POR CADA PRODUCTO:
+            │ │
+            │ └── POR CADA TIENDA (D1, Olímpica, Megatiendas):
+            │ │
+            │ ├── PRIORIDAD 1: ¿termino_busqueda?
+            │ │ └── generar_variantes("aceite 3000")
+            │ │ → ["aceite 3000", "aceite 3.000",
+            │ │ "aceite 3000ml", "aceite 3.000 ml"]
+            │ │ → buscar con TODAS las variantes
+            │ │ → combinar + deduplicar por URL
+            │ │ → seleccionar el MÁS BARATO
+            │ │
+            │ ├── PRIORIDAD 2: ¿URL fija (legacy)?
+            │ │ └── get_price(url, selector) → float
+            │ │
+            │ └── PRIORIDAD 3: Sin datos
+            │ └── ⚠ "Requiere configuración manual"
+            │
+            └─ 3. INSERT INTO precios_tiendas (...) VALUES (...)
+        </div>
+
+        <h3>5.2. Función generar_variantes() — Inteligencia de Búsqueda</h3>
+        <table>
+            <tr>
+                <th>Entrada</th>
+                <th>Variantes Generadas</th>
+                <th>Razón</th>
+            </tr>
+            <tr>
+                <td><code>"aceite 3000"</code></td>
+                <td><code>aceite 3000, aceite 3.000, aceite 3000ml, aceite 3.000 ml, aceite 3000 ml</code></td>
+                <td>D1 distingue "3.000" vs "3000"</td>
+            </tr>
+            <tr>
+                <td><code>"leche 1100"</code></td>
+                <td><code>leche 1100, leche 1.100, leche 1100ml, leche 1.100 ml</code></td>
+                <td>Formato colombiano de miles</td>
+            </tr>
+            <tr>
+                <td><code>"arroz 500"</code></td>
+                <td><code>arroz 500, arroz 500ml, arroz 500 ml</code></td>
+                <td>Sin punto (< 4 dígitos)</td>
+            </tr>
+        </table>
+
+        <!-- ═══════ 6. API ENDPOINTS ═══════ -->
+        <h2>6. API REST — Endpoints</h2>
+        <table>
+            <tr>
+                <th>Método</th>
+                <th>Ruta</th>
+                <th>Descripción</th>
+                <th>Respuesta</th>
+            </tr>
+            <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/get_products.php</code></td>
+                <td>Lista TODOS los productos con el precio más reciente por tienda</td>
+                <td>JSON array: <code>[{id, nombre, categoria, precios: {D1: N, OLIMPICA: N, ...}}]</code></td>
+            </tr>
+            <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/import_csv.php</code></td>
+                <td>Importar productos desde archivo CSV</td>
+                <td>JSON con contador de registros importados</td>
+            </tr>
+        </table>
+
+        <h3>6.1. Query SQL de get_products.php</h3>
+        <pre>SELECT p.id, p.nombre_personalizado as nombre, p.categoria,
+  (SELECT precio FROM precios_tiendas
+   WHERE producto_id = p.id AND tienda = 'D1'
+   ORDER BY fecha_registro DESC LIMIT 1) as precio_d1,
+  -- ... (subconsulta por cada tienda)
+FROM productos p
+ORDER BY
+  CASE WHEN p.categoria IN ('CARNES','VERDURAS') THEN 0 ELSE 1 END,
+  p.categoria, p.nombre_personalizado</pre>
+
+        <!-- ═══════ 7. SELECTORES CSS VERIFICADOS ═══════ -->
+        <h2>7. Registro de Selectores CSS por Tienda</h2>
+        <table>
+            <tr>
+                <th>Tienda</th>
+                <th>Uso</th>
+                <th>Selector</th>
+                <th>Verificado</th>
+            </tr>
+            <tr>
+                <td>Olímpica</td>
+                <td>Precio (producto)</td>
+                <td><code>.olimpica-dinamic-flags-0-x-currencyContainer</code></td>
+                <td>✅ 15/02/26</td>
+            </tr>
+            <tr>
+                <td>Olímpica</td>
+                <td>Trigger ubicación</td>
+                <td><code>.vtex-modal-layout-0-x-triggerContainer--location-delivery-info</code></td>
+                <td>✅ 15/02/26</td>
+            </tr>
+            <tr>
+                <td>Megatiendas</td>
+                <td>Precio (producto)</td>
+                <td><code>.vtex-product-price-1-x-sellingPriceValue</code></td>
+                <td>✅ 15/02/26</td>
+            </tr>
+            <tr>
+                <td>D1</td>
+                <td>Precio (producto)</td>
+                <td><code>.base__price</code></td>
+                <td>⚠ Pendiente</td>
+            </tr>
+            <tr>
+                <td>D1</td>
+                <td>Cards búsqueda</td>
+                <td><code>styles__StyledCard-sc-*</code> (dinámico)</td>
+                <td>🔧 En progreso</td>
+            </tr>
+        </table>
+
+        <!-- ═══════ 8. CONFIGURACIÓN LOCAL ═══════ -->
+        <h2>8. Configuración de Entorno Local</h2>
+        <table>
+            <tr>
+                <th>Componente</th>
+                <th>Valor</th>
+            </tr>
+            <tr>
+                <td>Servidor</td>
+                <td>XAMPP (Apache + MySQL)</td>
+            </tr>
+            <tr>
+                <td>DB Host</td>
+                <td><code>127.0.0.1:3306</code></td>
+            </tr>
+            <tr>
+                <td>DB User</td>
+                <td><code>root</code> (sin contraseña)</td>
+            </tr>
+            <tr>
+                <td>DB Name</td>
+                <td><code>despensa_inteligente</code></td>
+            </tr>
+            <tr>
+                <td>Proyecto</td>
+                <td><code>D:\Documentos\Proyectos ADSO\despensa_inteligente</code></td>
+            </tr>
+            <tr>
+                <td>Symlink XAMPP</td>
+                <td><code>C:\xampp\htdocs\despensa_inteligente → D:\...</code></td>
+            </tr>
+            <tr>
+                <td>Repositorio</td>
+                <td><code>github.com/modusaxon-hub/despensa_inteligente</code></td>
+            </tr>
+        </table>
+
+        <footer class="footer">
+            Documento generado por Agente Documentador Técnico Pro | 15 de Febrero 2026 | Despensa Inteligente — Santa
+            Marta
+        </footer>
+    </div>
+</body>
+
+</html>

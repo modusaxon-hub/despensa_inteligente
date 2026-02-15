@@ -4,49 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Despensa Inteligente - Dashboard</title>
+    <title>Despensa Inteligente | Planificador Maestro</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
     <header>
         <h1>Despensa Inteligente</h1>
-        <p>Control de inventario y optimización de mercado</p>
+        <p>Control Maestro de Presupuesto y Comparativa de Tiendas</p>
     </header>
-    <main id="app-container">
-        <div class="layout-wrapper">
-            <section class="shopping-list">
-                <div class="section-header">
-                    <h2>Catálogo de Productos Inteligente</h2>
-                    <p>Selecciona los productos para calcular tu presupuesto optimizado</p>
-                </div>
-                <div id="product-list" class="list-container">
-                    <!-- Se llenará dinámicamente como lista -->
-                </div>
-            </section>
 
-            <aside class="budget-panel" id="budget-sidebar">
-                <div class="budget-card">
-                    <h3>Presupuesto Optimizado</h3>
-                    <div class="budget-main">
-                        <span class="currency">$</span>
-                        <span id="total-budget">0</span>
-                    </div>
-                    <p class="budget-detail">Basado en el precio más bajo de cada tienda hoy.</p>
-                    <div id="selected-items-count" class="badge">0 productos seleccionados</div>
-                    <hr>
-                    <div id="budget-breakdown">
-                        <!-- Desglose por tienda -->
-                    </div>
-                    <button class="btn-primary-action" onclick="generateShoppingList()">Generar Lista de
-                        Compras</button>
+    <main class="main-planner">
+        <!-- Dashboard de Ahorro y Configuración de Plaza -->
+        <section class="top-dashboard">
+            <div class="savings-summary">
+                <div class="savings-card">
+                    <span>💰 Ahorro Histórico</span>
+                    <strong id="annual-savings">$0</strong>
                 </div>
-            </aside>
+            </div>
+
+            <div class="plaza-config">
+                <h3>🛍️ Configuración de Plaza / Carnicería</h3>
+                <div class="config-inputs">
+                    <div class="input-group">
+                        <label>Presupuesto Plaza:</label>
+                        <input type="number" id="budget-plaza" value="0" onchange="updateCalculations()">
+                    </div>
+                    <div class="input-group">
+                        <label>Presupuesto Carnicería:</label>
+                        <input type="number" id="budget-meat" value="0" onchange="updateCalculations()">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="planner-table-container">
+            <table class="excel-table">
+                <thead>
+                    <tr>
+                        <th>Cant.</th>
+                        <th>Producto</th>
+                        <th>D1</th>
+                        <th>Olímpica</th>
+                        <th>Ara</th>
+                        <th>Mega</th>
+                        <th>Destino</th>
+                    </tr>
+                </thead>
+                <tbody id="planner-body">
+                    <!-- Filas dinámicas -->
+                </tbody>
+            </table>
         </div>
+
+        <!-- Sidebar Flotante de Totales -->
+        <aside class="floating-summary">
+            <div class="summary-card">
+                <h3>Resumen de Compra</h3>
+                <div class="sum-row">
+                    <span>Total Tiendas:</span>
+                    <strong id="total-stores">$0</strong>
+                </div>
+                <div class="sum-row">
+                    <span>Presupuesto Especial:</span>
+                    <strong id="total-special">$0</strong>
+                </div>
+                <hr>
+                <div class="sum-row final">
+                    <span>GRAN TOTAL:</span>
+                    <strong id="grand-total">$0</strong>
+                </div>
+                <button class="btn-primary" onclick="confirmPurchase()">Confirmar Mercado</button>
+            </div>
+        </aside>
     </main>
-    <footer>
-        <p>Desarrollado para ADSO - 2026</p>
-    </footer>
+
     <script src="app/main.js"></script>
 </body>
 

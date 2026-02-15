@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora Técnica - Despensa Inteligente - 15/02/2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap');
+
+        :root {
+            --despensa-green: #2d8a4e;
+            --despensa-dark: #1a1a2e;
+            --text-main: #1a1a1a;
+            --accent: #e67e22;
+            --error-red: #e74c3c;
+            --success-green: #27ae60;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 2.5cm 2cm;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .paper-a4 {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 30px 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--despensa-dark);
+        }
+
+        h1 {
+            border-bottom: 3px solid var(--despensa-green);
+            padding-bottom: 15px;
+            font-size: 2.2em;
+        }
+
+        h2 {
+            border-left: 4px solid var(--despensa-green);
+            padding-left: 12px;
+            margin-top: 35px;
+        }
+
+        h3 {
+            color: var(--accent);
+        }
+
+        .hook-status {
+            background: #eafaf1;
+            border-left: 5px solid var(--despensa-green);
+            padding: 15px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .error-block {
+            background: #fdedec;
+            border-left: 5px solid var(--error-red);
+            padding: 15px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+
+        .solution-block {
+            background: #eafaf1;
+            border-left: 5px solid var(--success-green);
+            padding: 15px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .tag-error {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .tag-fix {
+            background: #27ae60;
+            color: white;
+        }
+
+        .tag-pending {
+            background: #f39c12;
+            color: white;
+        }
+
+        .tag-verified {
+            background: #2980b9;
+            color: white;
+        }
+
+        pre,
+        code {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            page-break-inside: avoid;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            page-break-inside: avoid;
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f8f8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8em;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .timeline {
+            border-left: 3px solid var(--despensa-green);
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '●';
+            position: absolute;
+            left: -27px;
+            color: var(--despensa-green);
+            font-size: 1.2em;
+        }
+
+        .timeline-time {
+            font-weight: 600;
+            color: var(--despensa-green);
+            font-size: 0.85em;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            text-align: center;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="paper-a4">
+        <header>
+            <div
+                style="color: var(--despensa-green); font-weight: bold; font-size: 0.8em; letter-spacing: 0.2em; text-transform: uppercase;">
+                Despensa Inteligente - Bitácora Técnica</div>
+            <h1>🔧 Bitácora de Desarrollo — 15 de Febrero 2026</h1>
+        </header>
+
+        <div class="hook-status">
+            <strong>Propósito:</strong> Documentar cada decisión técnica, error encontrado y solución aplicada durante
+            la jornada de desarrollo del módulo scraper y configuración de ubicación. |
+            <strong>Riesgo de no tenerlo:</strong> Sin esta bitácora, los errores resueltos hoy se repiten mañana sin
+            referencia.
+        </div>
+
+        <!-- ========== SECCIÓN 1: RESUMEN EJECUTIVO ========== -->
+        <h2>1. Resumen Ejecutivo de la Jornada</h2>
+        <table>
+            <tr>
+                <th>Módulo</th>
+                <th>Acción</th>
+                <th>Estado</th>
+            </tr>
+            <tr>
+                <td>Scraper — Ubicación Olímpica</td>
+                <td>Configurar Santa Marta Centro como ubicación predeterminada</td>
+                <td><span class="tag tag-fix">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>Scraper — Ubicación Megatiendas</td>
+                <td>Configurar Santa Marta Mercado vía localStorage</td>
+                <td><span class="tag tag-fix">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>Scraper — Selectores Olímpica</td>
+                <td>Corregir selector de precio (.sellingPriceValue → .currencyContainer)</td>
+                <td><span class="tag tag-fix">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>Scraper — URL Olímpica</td>
+                <td>Actualizar URL de producto aceite 3000ml (404 en URL anterior)</td>
+                <td><span class="tag tag-fix">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>BD — Precio D1</td>
+                <td>Corregir aceite de coco D1 de $39.900 a $10.450</td>
+                <td><span class="tag tag-fix">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>Agent Skills</td>
+                <td>Añadir regla TASK.md a configurador-global y planificacion-pro</td>
+                <td><span class="tag tag-fix">RESUELTO</span></td>
+            </tr>
+            <tr>
+                <td>Scraper — Búsqueda Genérica</td>
+                <td>Evolucionar a búsqueda por término genérico + favoritos</td>
+                <td><span class="tag tag-pending">PENDIENTE</span></td>
+            </tr>
+        </table>
+
+        <!-- ========== SECCIÓN 2: CRONOLOGÍA DE ERRORES Y SOLUCIONES ========== -->
+        <h2>2. Cronología de Errores y Soluciones</h2>
+
+        <div class="timeline">
+            <!-- ERROR 1 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~09:00 - ERROR #1: Ubicación Olímpica — networkidle timeout</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> Timeout en set_olimpica_location</strong><br>
+                    <code>Page.goto: Timeout 60000ms exceeded (networkidle)</code><br>
+                    <strong>Causa raíz:</strong> El evento <code>wait_until="networkidle"</code> espera a que TODAS las
+                    peticiones de red se completen. olympica.com carga ~50+ scripts de analytics (Google Tag Manager,
+                    Meta Pixel, etc.) que nunca terminan.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN</span> Cambiar a domcontentloaded</strong><br>
+                    <pre>await page.goto("https://www.olimpica.com/", wait_until="domcontentloaded", timeout=60000)</pre>
+                    <strong>Resultado:</strong> ✅ Carga en ~3s en vez de timeout. <code>domcontentloaded</code> se
+                    dispara cuando el HTML se parsea, sin esperar imágenes ni scripts externos.
+                </div>
+            </div>
+
+            <!-- ERROR 2 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~09:30 - ERROR #2: Selector de ubicación no encontrado</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> Selector .olimpica-dinamic-flags-0-x-shippingMethod
+                        no encontrado</strong><br>
+                    <code>Page.wait_for_selector: Timeout 10000ms exceeded</code><br>
+                    <strong>Causa raíz:</strong> El selector CSS de VTEX cambia entre versiones del sitio. El modal de
+                    ubicación puede aparecer automáticamente o requerir clic en el trigger.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN (Intento 1)</span> Selector combinado — NO
+                        FUNCIONÓ</strong><br>
+                    <pre>.olimpica-dinamic-flags-0-x-shippingMethod</pre>
+                    El selector individual era muy frágil.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN (Intento 2 — GANADORA)</span> Selector múltiple con
+                        locator.first</strong><br>
+                    <pre>trigger = page.locator(
+    ".vtex-modal-layout-0-x-triggerContainer--location-delivery-info, "
+    ".olimpica-dinamic-flags-0-x-shippingMethod"
+).first</pre>
+                    <strong>Resultado:</strong> ✅ Funciona con ambas versiones del selector VTEX.
+                </div>
+            </div>
+
+            <!-- ERROR 3 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~10:00 - ERROR #3: Modal de ubicación con múltiples estados</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> El modal muestra estados diferentes según
+                        sesión</strong><br>
+                    Olímpica presenta 3 modales distintos dependiendo del estado de cookies:
+                    <ul>
+                        <li><strong>Estado A:</strong> Modal "Envío a domicilio" → Botón "Continuar" (dirección ya
+                            guardada)</li>
+                        <li><strong>Estado B:</strong> Modal "Agrega una dirección" → Dropdowns Depto/Ciudad + input
+                            Dirección + Botón "Confirmar"</li>
+                        <li><strong>Estado C:</strong> "Lo sentimos, no tenemos cobertura" → Botón "IR A TIENDA
+                            OLIMPICA"</li>
+                    </ul>
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN (GANADORA)</span> Detección en cascada de los 3
+                        estados</strong><br>
+                    <pre>
+# 1. Prioridad: Botón Continuar (dirección ya guardada)
+continue_btn = page.get_by_role("button", name="Continuar")
+if await continue_btn.is_visible():
+    await continue_btn.click()
+    return
+
+# 2. Modal "Agrega una dirección" (Confirmar)
+confirm_btn = page.get_by_role("button", name="Confirmar")
+if await confirm_btn.is_visible():
+    # Asegurar dirección
+    addr_input.fill("centro")
+    await confirm_btn.click()
+    return
+
+# 3. Abrir modal manualmente si no apareció
+trigger.click() → re-check Continuar/Confirmar
+                    </pre>
+                    <strong>Resultado:</strong> ✅ Maneja los 3 estados correctamente.
+                </div>
+            </div>
+
+            <!-- ERROR 4 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~10:30 - ERROR #4: 0 dropdowns encontrados tras abrir trigger</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> Encontrados 0 selectores de ubicación</strong><br>
+                    <code>Encontrados 0 selectores de ubicación.</code><br>
+                    <strong>Causa raíz:</strong> Al hacer clic en el trigger, el modal que aparecía era el de
+                    "Continuar" (Estado A), no el de dropdowns. El código intentaba buscar dropdowns sin verificar
+                    primero qué modal apareció.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN</span> Re-verificar botones tras abrir
+                        trigger</strong><br>
+                    <pre>
+await trigger.click()
+await page.wait_for_timeout(4000)
+
+# Re-verificar qué modal apareció
+if await continue_btn.is_visible():
+    await continue_btn.click()
+    return
+
+if await confirm_btn.is_visible():
+    await confirm_btn.click()
+    return
+
+# Solo si ningún botón → intentar dropdowns</pre>
+                    <strong>Resultado:</strong> ✅ <code>'Continuar' pulsado tras trigger.</code>
+                </div>
+            </div>
+
+            <!-- ERROR 5 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~10:45 - ERROR #5: Selector de precio incorrecto en Olímpica</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> Timeout en selector de precio</strong><br>
+                    <code>waiting for locator(".vtex-product-price-1-x-sellingPriceValue") to be visible — Timeout 15000ms</code><br>
+                    <strong>Causa raíz:</strong> El selector <code>.vtex-product-price-1-x-sellingPriceValue</code> no
+                    existe en la versión actual de la página de producto de Olímpica. Han migrado a clases custom:
+                    <code>.olimpica-dinamic-flags-0-x-currencyContainer</code>.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN</span> Nuevo selector verificado vía browser</strong><br>
+                    <pre>
+-- Antes (roto):
+.vtex-product-price-1-x-sellingPriceValue
+
+-- Después (funcional):
+.olimpica-dinamic-flags-0-x-currencyContainer</pre>
+                    Verificado que <code>commonExists: false</code> para el viejo selector y
+                    <code>currencyExists: true, currencyText: "$ 26.990"</code> para el nuevo.
+                    <br><strong>Resultado:</strong> ✅ Precio $26.990 extraído correctamente.
+                </div>
+            </div>
+
+            <!-- ERROR 6 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~11:00 - ERROR #6: URL de producto Olímpica retorna 404</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> URL antigua del aceite devuelve 404</strong><br>
+                    <code>https://www.olimpica.com/aceite-diana-mezcla-vegetales-vitamina-a-d-3000-ml/p → 404</code><br>
+                    <strong>Causa raíz:</strong> Olímpica cambia slugs de producto frecuentemente, añadiendo sufijos de
+                    SKU/EAN.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN</span> Búsqueda del producto correcto vía
+                        browser</strong><br>
+                    <pre>
+-- URL nueva (funcional):
+https://www.olimpica.com/aceite-medalla-oro-mezc-veget-3000-ml/p
+-- Precio: $19.990 (más barato que Diana $26.990)</pre>
+                    <strong>Decisión:</strong> El usuario solicitó buscar por término genérico ("aceite 3000") para
+                    encontrar el más barato, no un producto fijo.
+                    <br><strong>Resultado:</strong> ✅ Medalla de Oro $19.990 identificado como el más económico.
+                </div>
+            </div>
+
+            <!-- ERROR 7 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~11:45 - ERROR #7: Precio incorrecto de Aceite de Coco en D1</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> BD: $39.900 | Real: $10.450</strong><br>
+                    El precio almacenado para "ACEITE COCO" (ID 194) en D1 era $39.900, pero el usuario verificó en
+                    <code>domicilios.tiendasd1.com</code> que el precio real era $10.450 (Natri 210ml).
+                    <br><strong>Causa raíz:</strong> Posible error del scraper al leer un selector que capturaba otro
+                    precio en la página o dato importado del CSV incorrecto.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN</span> Corrección directa en BD</strong><br>
+                    <pre>UPDATE precios_tiendas SET precio = 10450 
+WHERE producto_id = 194 AND tienda = 'D1' 
+ORDER BY fecha_registro DESC LIMIT 1;</pre>
+                    <strong>Resultado:</strong> ✅ Precio corregido a $10.450.
+                </div>
+            </div>
+
+            <!-- ERROR 8 -->
+            <div class="timeline-item">
+                <div class="timeline-time">~11:26 - ERROR #8: Bloque except duplicado en Python</div>
+                <div class="error-block">
+                    <strong><span class="tag tag-error">ERROR</span> SyntaxError: dos bloques except para el mismo
+                        try</strong><br>
+                    <code>except Exception as e: ... except Exception as e: ...</code><br>
+                    <strong>Causa raíz:</strong> Error de edición al refactorizar — se dejó un bloque except residual de
+                    una versión anterior.
+                </div>
+                <div class="solution-block">
+                    <strong><span class="tag tag-fix">SOLUCIÓN</span> Eliminar bloque duplicado</strong><br>
+                    Se eliminaron las líneas 107-108 que contenían el segundo <code>except</code>.
+                    <br><strong>Resultado:</strong> ✅ Script ejecuta sin errores de sintaxis.
+                </div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- ========== SECCIÓN 3: ESTADO ACTUAL DEL SCRAPER ========== -->
+        <h2>3. Estado Actual de auto_bot.py</h2>
+
+        <h3>Funciones Implementadas</h3>
+        <table>
+            <tr>
+                <th>Función</th>
+                <th>Propósito</th>
+                <th>Estado</th>
+            </tr>
+            <tr>
+                <td><code>get_price(page, url, selector)</code></td>
+                <td>Navegar a URL y extraer precio con selector CSS</td>
+                <td><span class="tag tag-verified">FUNCIONAL</span></td>
+            </tr>
+            <tr>
+                <td><code>set_olimpica_location(page)</code></td>
+                <td>Configurar Santa Marta Centro en Olímpica (3 estados de modal)</td>
+                <td><span class="tag tag-verified">FUNCIONAL</span></td>
+            </tr>
+            <tr>
+                <td><code>set_megatiendas_location(page)</code></td>
+                <td>Inyectar ubicación Santa Marta Mercado vía localStorage</td>
+                <td><span class="tag tag-verified">FUNCIONAL</span></td>
+            </tr>
+            <tr>
+                <td><code>run_scraper()</code></td>
+                <td>Orquestador principal: itera productos, tiendas, y guarda precios</td>
+                <td><span class="tag tag-verified">FUNCIONAL</span></td>
+            </tr>
+        </table>
+
+        <h3>Última Ejecución Exitosa</h3>
+        <pre>
+Configurando ubicación en Megatiendas...
+  -> Localización inyectada vía LocalStorage
+Configurando ubicación en Olímpica (Santa Marta - Centro)...
+  -> Modal no visible. Intentando abrir con el trigger...
+  -> 'Continuar' pulsado tras trigger.
+Procesando: ACEITE COCINA X 3000ML
+  -> OLIMPICA: $26990.0
+  -> MEGATIENDAS: $24990.0
+Sincronización finalizada.
+        </pre>
+
+        <!-- ========== SECCIÓN 4: DIAGRAMA DE ARQUITECTURA ========== -->
+        <h2>4. Arquitectura del Sistema</h2>
+
+        <h3>Modelo Entidad-Relación</h3>
+        <pre>
+┌─────────────────────────────────────┐
+│            productos                │
+├─────────────────────────────────────┤
+│ id              INT PK AUTO_INC    │
+│ nombre_personal VARCHAR(255) NOT NULL│
+│ categoria       VARCHAR(100)        │
+│ es_favorito     BOOLEAN             │
+│ cantidad_actual  DECIMAL(10,2)      │
+│ cantidad_minima  DECIMAL(10,2)      │
+│ unidad_medida    VARCHAR(20)        │
+│ url_olimpica     TEXT               │
+│ url_d1           TEXT               │
+│ url_ara          TEXT               │
+│ url_megatiendas  TEXT               │
+│ selector_olimpica VARCHAR(255)      │
+│ selector_d1      VARCHAR(255)       │
+│ selector_ara     VARCHAR(255)       │
+│ selector_megat   VARCHAR(255)       │
+│ ultima_actualiz  TIMESTAMP          │
+└──────────┬──────────────────────────┘
+           │ 1:N
+           ▼
+┌─────────────────────────────────────┐
+│          precios_tiendas            │
+├─────────────────────────────────────┤
+│ id              INT PK              │
+│ producto_id     INT FK → productos  │
+│ tienda          ENUM(D1,OLIMPICA,   │
+│                 ARA,EXITO,MEGA,OTRO)│
+│ precio          DECIMAL(10,2)       │
+│ cant_presentac  DECIMAL(10,2)       │
+│ unid_presentac  VARCHAR(10)         │
+│ precio_por_unid DECIMAL(10,4) PUM   │
+│ fecha_registro  TIMESTAMP           │
+└──────────┬──────────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────────┐
+│        historial_compras            │
+├─────────────────────────────────────┤
+│ id              INT PK              │
+│ producto_id     INT FK → productos  │
+│ fecha_compra    TIMESTAMP           │
+│ tienda_elegida  VARCHAR(50)         │
+│ precio_pagado   DECIMAL(10,2)       │
+│ cantidad_compr  DECIMAL(10,2)       │
+│ ahorro_estimado DECIMAL(10,2)       │
+└─────────────────────────────────────┘
+        </pre>
+
+        <h3>Flujo del Scraper</h3>
+        <pre>
+[auto_bot.py]
+     │
+     ├── 1. set_megatiendas_location()
+     │       └── localStorage.setItem('shippingData', {...})
+     │
+     ├── 2. set_olimpica_location()
+     │       ├── ¿Botón Continuar? → click → return
+     │       ├── ¿Botón Confirmar? → fill("centro") → click → return
+     │       └── ¿Trigger visible? → click → re-check → dropdowns
+     │
+     └── 3. for each producto:
+             for each tienda (D1, OLIMPICA, ARA, MEGA):
+                 └── get_price(url, selector)
+                       ├── goto(url, domcontentloaded)
+                       ├── wait_for_selector(timeout=15s)
+                       ├── inner_text → limpiar → float
+                       └── INSERT INTO precios_tiendas
+        </pre>
+
+        <!-- ========== SECCIÓN 5: CONFIGURACIÓN DE SELECTORES ========== -->
+        <h2>5. Registro de Selectores Verificados</h2>
+        <table>
+            <tr>
+                <th>Tienda</th>
+                <th>Tipo</th>
+                <th>Selector CSS</th>
+                <th>Verificado</th>
+            </tr>
+            <tr>
+                <td>Olímpica</td>
+                <td>Precio producto</td>
+                <td><code>.olimpica-dinamic-flags-0-x-currencyContainer</code></td>
+                <td>✅ 15/02/2026</td>
+            </tr>
+            <tr>
+                <td>Olímpica</td>
+                <td>Trigger ubicación</td>
+                <td><code>.vtex-modal-layout-0-x-triggerContainer--location-delivery-info</code></td>
+                <td>✅ 15/02/2026</td>
+            </tr>
+            <tr>
+                <td>Megatiendas</td>
+                <td>Precio producto</td>
+                <td><code>.vtex-product-price-1-x-sellingPriceValue</code></td>
+                <td>✅ 15/02/2026</td>
+            </tr>
+            <tr>
+                <td>D1</td>
+                <td>Precio producto</td>
+                <td><code>.base__price</code></td>
+                <td>⚠️ Pendiente verificar</td>
+            </tr>
+        </table>
+
+        <!-- ========== SECCIÓN 6: SKILLS ACTIVOS ========== -->
+        <h2>6. Skills del Agente Activos en este Proyecto</h2>
+        <table>
+            <tr>
+                <th>Skill</th>
+                <th>Acción Aplicada</th>
+            </tr>
+            <tr>
+                <td><strong>configurador-global</strong></td>
+                <td>BD local MySQL (root@127.0.0.1), symlinks XAMPP, regla TASK.md añadida</td>
+            </tr>
+            <tr>
+                <td><strong>planificacion-pro</strong></td>
+                <td>Plan de scraper búsqueda genérica con fases, riesgos y entregables. Regla TASK.md añadida.</td>
+            </tr>
+            <tr>
+                <td><strong>documentador-tecnico</strong></td>
+                <td>Esta bitácora + diagrama de arquitectura</td>
+            </tr>
+            <tr>
+                <td><strong>modo-produccion</strong></td>
+                <td>Verificación de selectores CSS en producción, limpieza de código duplicado</td>
+            </tr>
+            <tr>
+                <td><strong>brainstorming-pro</strong></td>
+                <td>Ideación del enfoque de búsqueda genérica vs URL fija</td>
+            </tr>
+        </table>
+
+        <!-- ========== SECCIÓN 7: PRÓXIMOS PASOS ========== -->
+        <h2>7. Próximos Pasos Inmediatos</h2>
+        <ol>
+            <li><strong>Implementar búsqueda genérica</strong>: Funciones <code>search_cheapest_olimpica()</code> y
+                <code>search_cheapest_megatiendas()</code></li>
+            <li><strong>Columnas BD</strong>: <code>termino_busqueda</code> + <code>url_favorita_*</code></li>
+            <li><strong>Verificar selector D1</strong>: Confirmar que <code>.base__price</code> sigue siendo correcto
+            </li>
+            <li><strong>Endpoint API</strong>: <code>set_favorite_url.php</code> para que el usuario guarde URLs
+                favoritas</li>
+        </ol>
+
+        <footer class="footer">
+            Documento generado por Agente Documentador Técnico Pro | 15 de Febrero 2026 | Despensa Inteligente — Santa
+            Marta
+        </footer>
+    </div>
+</body>
+
+</html>
