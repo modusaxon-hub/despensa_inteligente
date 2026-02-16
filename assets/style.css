@@ -110,7 +110,8 @@ header {
 
 .price-cell {
     font-weight: 600;
-    color: #2ecc71;
+    color: #34495e;
+    /* Neutral Base */
 }
 
 .price-cell.empty {
@@ -163,4 +164,248 @@ header {
     font-weight: bold;
     cursor: pointer;
     margin-top: 15px;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: var(--dark);
+}
+
+.btn-secondary {
+    background: #ecf0f1;
+    color: var(--text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background: #d5dbdb;
+}
+
+/* Toolbar */
+.toolbar {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-add {
+    background: linear-gradient(135deg, var(--primary), #43a047);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-add:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4);
+}
+
+
+
+/* Precios Editables */
+.price-link {
+    cursor: pointer;
+    transition: color 0.1s;
+    border-bottom: 1px dotted transparent;
+}
+
+.price-link:hover {
+    color: var(--dark);
+    border-bottom: 1px dotted var(--dark);
+}
+
+/* N/D Clickeable */
+.nd-link {
+    color: #3498db;
+    /* Action Blue */
+    font-weight: 600;
+    font-size: 10px;
+    cursor: pointer;
+    text-decoration: underline dotted;
+    transition: color 0.2s;
+}
+
+.nd-link:hover {
+    color: #2980b9;
+    /* Darker Blue */
+    text-decoration: underline solid;
+}
+
+/* Mejor Precio (highlight) */
+.price-cell.best-price {
+    background: #e8f5e9;
+    color: #1b5e20;
+    font-weight: 800;
+    border-radius: 4px;
+}
+
+.has-price {
+    font-weight: 600;
+}
+
+/* Modales */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-box {
+    background: white;
+    border-radius: 16px;
+    width: 420px;
+    max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: modalIn 0.25s ease-out;
+}
+
+@keyframes modalIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    color: white;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.modal-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 20px 24px;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #eee;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+/* ═══════════════════════════════════════════
+   ESTILOS NUEVOS: TIENDA PREFERIDA
+   ═══════════════════════════════════════════ */
+
+/* Reemplaza a .best-price cuando hay una selección */
+.price-cell.selected-price {
+    background-color: #e8f5e9 !important;
+    /* Verde muy suave (igual que best-price) */
+    color: #1b5e20;
+    /* Verde oscuro (Green 900) */
+    font-weight: 800;
+    border: 2px solid #00c853;
+    /* Verde vibrante (Accent Green A700) */
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 200, 83, 0.15);
+}
+
+/* Contenedor Flex para Precio + Estrella */
+.price-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Estrella de Tienda */
+.store-star {
+    font-size: 16px;
+    line-height: 1;
+    color: #bdbdbd;
+    /* Gris medio por defecto */
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.store-star:hover {
+    color: #69f0ae;
+    /* Verde claro hover */
+    transform: scale(1.3);
+}
+
+.store-star.active {
+    color: #00c853;
+    /* Verde vibrante activo */
+    text-shadow: 0 2px 4px rgba(0, 200, 83, 0.3);
+    transform: scale(1.1);
 }

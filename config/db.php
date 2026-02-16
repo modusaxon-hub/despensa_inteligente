@@ -5,6 +5,9 @@ define('DB_NAME', 'despensa_inteligente');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
+// Ruta absoluta a Python (Instalación Global)
+define('PYTHON_PATH', 'C:\\Program Files\\Python312\\python.exe');
+
 try {
     $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

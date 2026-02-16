@@ -1,0 +1,8 @@
+scrapers/browsers_final/
+scrapers/browsers/
+scrapers/browsers_public/
+__pycache__/
+test_payload.json
+api/test_python.php
+.DS_Store
+Thumbs.db

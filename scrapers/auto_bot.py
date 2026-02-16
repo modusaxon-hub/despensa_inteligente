@@ -1,10 +1,9 @@
+import sys
 import asyncio
 import re
 from playwright.async_api import async_playwright
 import mysql.connector
 from datetime import datetime
-
-# Configuración de BD
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
@@ -24,20 +23,36 @@ def limpiar_precio(texto):
 def generar_variantes(termino):
     """
     MODO DIOS: Genera variantes inteligentes del término de búsqueda.
-    Ej: "aceite 3000" → ["aceite 3000", "aceite 3.000", "aceite 3000ml", "aceite 3.000 ml"]
-    Esto asegura que no se pierdan resultados por formato de número.
+    Ej: "aceite 3000 (ml)" → ["aceite", "aceite 3000", "aceite 3000ml"]
+    Esto asegura que no se pierdan resultados por exceso de especificidad.
     """
     variantes = set()
+    termino = termino.strip()
     variantes.add(termino)
 
-    # Detectar números en el término
+    # 1. Limpieza de caracteres especiales (paréntesis, puntos raros)
+    limpio = re.sub(r'[^\w\s]', '', termino).strip()
+    if limpio and limpio != termino:
+        variantes.add(limpio)
+
+    # 2. Estrategia "Humana": Probar solo la primera palabra clave
+    palabras = limpio.split()
+    if palabras:
+        variantes.add(palabras[0])
+
+    # 3. Estrategia "Especificidad Media": Primeras 2 palabras
+    if len(palabras) >= 2:
+        variantes.add(f"{palabras[0]} {palabras[1]}")
+
+    # 4. Variantes numéricas (existentes)
     numeros = re.findall(r'\d[\d.]*', termino)
     for num in numeros:
         num_limpio = num.replace('.', '')  # "3.000" → "3000"
 
-        if len(num_limpio) >= 4:
+        if len(num_limpio) >= 3: # Solo si tiene sentido (>=3 digitos)
             # Formato con punto de miles: 3000 → 3.000
             con_punto = f"{int(num_limpio):,.0f}".replace(',', '.')
+            
             # Variante SIN punto
             var_sin = termino.replace(num, num_limpio)
             variantes.add(var_sin)
@@ -117,13 +132,15 @@ async def set_megatiendas_location(page):
 # ══════════════════════════════════════════════════
 
 async def get_price(page, url, selector):
-    """Extrae precio de una URL directa con un selector CSS."""
+    """Extrae precio de una URL directa con un selector CSS (toma el primero si hay varios)."""
     if not url or not selector:
         return None
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=60000)
-        await page.wait_for_selector(selector, timeout=15000)
-        price_text = await page.inner_text(selector)
+        # Usar .first para evitar errores si hay múltiples precios en una búsqueda
+        locator = page.locator(selector).first
+        await locator.wait_for(timeout=15000)
+        price_text = await locator.inner_text()
         return limpiar_precio(price_text)
     except Exception as e:
         print(f"    ⚠ Error en {url}: {e}")
@@ -289,7 +306,8 @@ async def run_scraper():
         SELECT id, nombre_personalizado as nombre, termino_busqueda,
                url_d1, selector_d1, url_olimpica, selector_olimpica,
                url_ara, selector_ara, url_megatiendas, selector_megatiendas
-        FROM productos WHERE id = 195
+        FROM productos
+        ORDER BY id ASC
     """)
     products = cursor.fetchall()
 
@@ -306,7 +324,7 @@ async def run_scraper():
 
         for prod in products:
             print(f"\n{'='*60}")
-            print(f"🛒 Procesando: {prod['nombre']}")
+            print(f"🛒 Procesando: {prod['nombre']} (ID: {prod['id']})")
             print(f"{'='*60}")
 
             termino = prod.get('termino_busqueda')
@@ -340,12 +358,19 @@ async def run_scraper():
                 precio = None
                 nombre_encontrado = None
 
-                # PRIORIDAD 1: Búsqueda inteligente con variantes
-                if termino:
+                # PRIORIDAD 1: URL Manual / Legacy (Fallback convertido en primario)
+                if tienda['url_legacy'] and tienda['selector']:
+                    print(f"    🔗 Usando URL Manual Configurada...")
+                    precio = await get_price(page, tienda['url_legacy'], tienda['selector'])
+                    if precio:
+                        print(f"    💰 Precio (URL directa): ${precio:,.0f}")
+                        nombre_encontrado = "URL Manual"
+
+                # PRIORIDAD 2: Búsqueda inteligente con variantes
+                if not precio and termino:
                     print(f"    🧠 Búsqueda inteligente: variantes de '{termino}'")
                     variantes = generar_variantes(termino)
-                    print(f"    📋 Variantes generadas: {variantes}")
-
+                    
                     resultado = await tienda['search_fn'](page, termino)
                     if resultado:
                         precio = resultado['precio']
@@ -353,13 +378,6 @@ async def run_scraper():
                         print(f"    💰 MÁS BARATO: {nombre_encontrado} → ${precio:,.0f}")
                     else:
                         print(f"    ❌ Sin resultados por búsqueda.")
-
-                # PRIORIDAD 2: URL legacy (fallback)
-                if not precio and tienda['url_legacy'] and tienda['selector']:
-                    print(f"    🔗 Fallback: URL directa...")
-                    precio = await get_price(page, tienda['url_legacy'], tienda['selector'])
-                    if precio:
-                        print(f"    💰 Precio (URL directa): ${precio:,.0f}")
 
                 # GUARDAR RESULTADO
                 if precio:
@@ -379,5 +397,41 @@ async def run_scraper():
     print("✅ Sincronización finalizada.")
     print(f"{'='*60}")
 
+
 if __name__ == "__main__":
-    asyncio.run(run_scraper())
+    import sys
+    # Modo CLI para precio individual (PHP lo llama)
+    if len(sys.argv) > 1 and sys.argv[1] == '--check':
+        # Uso: python auto_bot.py --check "URL" "SELECTOR"
+        # Asegurarse de tener argumentos suficientes
+        if len(sys.argv) < 4:
+            print("ERROR: Faltan argumentos. Uso: --check URL SELECTOR")
+            sys.exit(1)
+            
+        url = sys.argv[2]
+        selector = sys.argv[3]
+        
+        async def check_single():
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True)
+                # Crear contexto con user agent para evitar bloqueos
+                context = await browser.new_context(
+                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+                )
+                page = await context.new_page()
+                try:
+                    price = await get_price(page, url, selector)
+                    if price is not None:
+                        print(f"RESULT_PRICE:{int(price)}")
+                    else:
+                        print("RESULT_PRICE:0")
+                except Exception as e:
+                    print(f"ERROR_SCRAPE:{str(e)}")
+                    print("RESULT_PRICE:0")
+                finally:
+                    await browser.close()
+        
+        asyncio.run(check_single())
+    else:
+        # Modo Normal (Cron/Bot)
+        asyncio.run(run_scraper())

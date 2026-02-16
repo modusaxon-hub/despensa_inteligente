@@ -39,6 +39,15 @@
             </div>
         </section>
 
+        <!-- Botón Agregar Producto -->
+        <div class="toolbar"
+            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <button class="btn-add" onclick="openAddModal()">➕ Agregar Producto</button>
+            <button class="btn-primary" onclick="runFullScraper()"
+                style="background:#673ab7; border-color:#512da8; padding: 10px 15px; font-weight:bold;">🔄 Actualizar
+                TODO (Precios)</button>
+        </div>
+
         <div class="planner-table-container">
             <table class="excel-table">
                 <thead>
@@ -79,6 +88,78 @@
             </div>
         </aside>
     </main>
+
+    <!-- Modal: Agregar Producto -->
+    <div class="modal-overlay" id="modal-add" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>➕ Agregar Producto</h3>
+                <button class="modal-close" onclick="closeModal('modal-add')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nombre del producto *</label>
+                    <input type="text" id="add-nombre" placeholder="Ej: Aceite Diana 3000ml">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="add-categoria">
+                        <option value="General">General</option>
+                        <option value="ACEITES Y GRASAS">Aceites y Grasas</option>
+                        <option value="ARROZ Y GRANOS">Arroz y Granos</option>
+                        <option value="ASEO HOGAR">Aseo Hogar</option>
+                        <option value="ASEO PERSONAL">Aseo Personal</option>
+                        <option value="BEBIDAS">Bebidas</option>
+                        <option value="CARNES">Carnes</option>
+                        <option value="CONDIMENTOS">Condimentos</option>
+                        <option value="ENLATADOS">Enlatados</option>
+                        <option value="HARINAS">Harinas</option>
+                        <option value="LACTEOS">Lácteos</option>
+                        <option value="PANADERIA">Panadería</option>
+                        <option value="SNACKS">Snacks</option>
+                        <option value="VERDURAS">Verduras</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Término de búsqueda (para el bot)</label>
+                    <input type="text" id="add-termino" placeholder="Ej: aceite 3000">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('modal-add')">Cancelar</button>
+                <button class="btn-primary" onclick="addProduct()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Agregar URL de Tienda -->
+    <div class="modal-overlay" id="modal-url" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>🔗 Agregar URL / SKU del Producto</h3>
+                <button class="modal-close" onclick="closeModal('modal-url')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="url-context" style="font-size:12px;color:#666;margin-bottom:12px;"></p>
+                <div class="form-group">
+                    <label>URL del producto en la tienda</label>
+                    <input type="text" id="url-input" placeholder="https://tienda.com/producto...">
+                </div>
+                <div class="form-group">
+                    <label>Selector CSS del precio (opcional)</label>
+                    <input type="text" id="selector-input" placeholder="Ej: .base__price">
+                </div>
+                <input type="hidden" id="url-producto-id">
+                <input type="hidden" id="url-tienda">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="checkPriceNow()"
+                    style="background:#ff9800; border-color:#f57c00; margin-right:auto;">⚡ Traer Precio</button>
+                <button class="btn-secondary" onclick="closeModal('modal-url')">Cancelar</button>
+                <button class="btn-primary" onclick="saveProductUrl()">Guardar URL</button>
+            </div>
+        </div>
+    </div>
 
     <script src="app/main.js"></script>
 </body>
